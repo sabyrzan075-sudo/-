@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Web Benchmark</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: monospace;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #161b22;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+        }
+        h1 {
+            color: #58a6ff;
+            font-size: 22px;
+        }
+        .user-tag {
+            color: #f0883e;
+            font-weight: bold;
+        }
+        button {
+            background-color: #238636;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+        button:active {
+            background-color: #2ea043;
+        }
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #3fb950;
+        }
+        .loading {
+            color: #d29922;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>AnTuTu Web Edition</h1>
+        <p>Тест для устройства: <span id="nickname" class="user-tag">Гость</span></p>
+
+        <button onclick="runBenchmark()">Запустить тест CPU</button>
+
+        <div class="result" id="status">Нажми кнопку для старта</div>
+    </div>
+
+    <script>
+        // Скрипт для подстановки никнейма из ссылки (например: твойсайт.com/?user=ТвойНик)
+        const urlParams = new URLSearchParams(window.location.search);
+        const user = urlParams.get('user');
+        if (user) {
+            document.getElementById('nickname').innerText = "@" + user;
+        }
+
+        // Функция бенчмарка процессора
+        function runBenchmark() {
+            const status = document.getElementById("status");
+            status.className = "result loading";
+            status.innerText = "Идет нагрузка процессора...";
+
+            setTimeout(() => {
+                const startTime = performance.now();
+                
+                // Тяжелый математический цикл для проверки скорости CPU
+                let score = 0;
+                for (let i = 0; i < 60000000; i++) {
+                    score += Math.sqrt(i) * Math.cos(i);
+                }
+
+                const endTime = performance.now();
+                const duration = (endTime - startTime) / 1000; // время в секундах
+                
+                // Расчет условных «баллов»
+                const points = Math.round(12000 / duration);
+
+                status.className = "result";
+                status.innerHTML = `Тест окончен!<br>Время: ${duration.toFixed(2)} сек.<br><b>Результат: ${points} балов</b>`;
+            }, 100);
